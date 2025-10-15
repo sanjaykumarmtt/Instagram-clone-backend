@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>OTP - Instagram Clone</title>
+</head>
+<body style="font-family: Arial, sans-serif; background-color: #f4f4f4; padding: 20px;">
+
+    <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+        
+        <div style="background-color: #007bff; padding: 20px; border-top-left-radius: 8px; border-top-right-radius: 8px; text-align: center;">
+             <img th:src="|cid:logo|" alt="Instagram Clone Logo" style="width: 150px; height: auto;">
+        </div>
+
+        <div style="padding: 30px; color: #333333;">
+            <h2 style="color: #333333;">உங்கள் கணக்கை உறுதிப்படுத்தவும்</h2>
+            <p>வணக்கம் <span th:text="${userName}">பயனர்</span>,</p>
+            <p>நீங்கள் Instagram Clone-இல் உள்நுழைய அல்லது பதிவு செய்ய முயற்சித்துள்ளீர்கள். கீழே உள்ள குறியீட்டைப் (Code) பயன்படுத்தவும்:</p>
+            
+            <div style="text-align: center; margin: 30px 0;">
+                <span style="display: inline-block; padding: 15px 25px; background-color: #e9ecef; border-radius: 4px; font-size: 24px; font-weight: bold; color: #dc3545;"
+                      th:text="${otp}">123456</span> </div>
+
+            <p style="font-size: 14px; color: #666666;">பாதுகாப்பு காரணங்களுக்காக, இந்த OTP 5 நிமிடங்களுக்கு மட்டுமே செல்லுபடியாகும். இதை யாருடனும் பகிர வேண்டாம்.</p>
+        </div>
+
+        <div style="border-top: 1px solid #eeeeee; padding: 15px 30px; text-align: center; font-size: 12px; color: #999999;">
+            <p>&copy; <span th:text="${#dates.format(#dates.createNow(), 'yyyy')}">2025</span> Instagram Clone</p>
+        </div>
+    </div>
+</body>
+</html>
