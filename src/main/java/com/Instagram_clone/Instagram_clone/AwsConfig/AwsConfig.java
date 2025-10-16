@@ -11,7 +11,6 @@ import software.amazon.awssdk.services.s3.presigner.S3Presigner;
 @Configuration
 public class AwsConfig {
 
-    // @Value இன்ஜெக்ஷன்கள் - இவை அப்படியே இருக்கட்டும்
     @Value("${cloud.aws.credentials.access-key}")
     private String ACCESS_KEY;
 
@@ -21,7 +20,6 @@ public class AwsConfig {
     @Value("${cloud.aws.region.static}")
     private String REGION;
 
-    // 👇 1. StaticCredentialsProvider Bean: இதுதான் முக்கியம்!
     @Bean
     public StaticCredentialsProvider credentialsProvider() {
         return StaticCredentialsProvider.create(
@@ -29,21 +27,20 @@ public class AwsConfig {
         );
     }
 
-    // 👇 2. S3Client Bean: ஒரே ஒரு முறை, உள்ளீட்டை ஏற்கிறது (Line 25 முதல் 38 வரை உள்ள மற்ற s3client முறைகளை நீக்க வேண்டும்)
     @Bean
     public S3Client s3client(StaticCredentialsProvider credentialsProvider) {
         return S3Client.builder()
                 .region(Region.of(REGION))
-                .credentialsProvider(credentialsProvider) // DI மூலம் பெறப்பட்டது
+                .credentialsProvider(credentialsProvider) 
                 .build();
     }
 
-    // 👇 3. S3Presigner Bean: ஒரே ஒரு முறை, உள்ளீட்டை ஏற்கிறது (Line 40 முதல் 51 வரை உள்ள மற்ற s3Presigner முறைகளை நீக்க வேண்டும்)
+    
     @Bean
     public S3Presigner s3Presigner(StaticCredentialsProvider credentialsProvider) {
         return S3Presigner.builder()
                 .region(Region.of(REGION))
-                .credentialsProvider(credentialsProvider) // DI மூலம் பெறப்பட்டது
+                .credentialsProvider(credentialsProvider) 
                 .build();
     }
 }

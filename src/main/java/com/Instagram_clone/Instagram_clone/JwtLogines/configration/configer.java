@@ -91,8 +91,8 @@ public class configer {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         
-//        configuration.setAllowedOrigins(Arrays.asList("http://10.31.93.137:5174")); 
-        configuration.setAllowedOrigins(Arrays.asList("https://instagram-clone-5c71d.web.app/")); 
+//        configuration.setAllowedOrigins(Arrays.asList("http://localhost:5173/")); 
+        configuration.setAllowedOrigins(Arrays.asList("https://ins-spring-boot-applicat-26fce.web.app/"));
         configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type")); 
         
         configuration.setAllowCredentials(true); 
