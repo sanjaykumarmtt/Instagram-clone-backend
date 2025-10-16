@@ -43,7 +43,7 @@ public class SecurityService implements UserDetailsService {
 	private JavaMailSender mailSender;
 	@Autowired
 	AwsServise AwsServise;
-	
+
 	@Autowired
 	private SpringTemplateEngine templateEngine;
 
@@ -59,26 +59,37 @@ public class SecurityService implements UserDetailsService {
 	}
 
 	public LoginEntity Register(DTOLogindata dto, MultipartFile prof) throws HostelException, IOException {
-		if (verifyOTP(dto.getOtp())) {
-			String failurl = AwsServise.AwsS3fail_stor(prof);
-			if (failurl != null) {
-				LoginEntity LoginEntity = new LoginEntity();
-				LoginEntity.setFuallname(dto.getFuallname());
-				LoginEntity.setUsername(dto.getUsername());
-				LoginEntity.setPassword(dto.getPassword());
-				LoginEntity.setRole(dto.getRole());
-				LoginEntity.setPeofaile(failurl);
-				return SecurityRepositry.save(LoginEntity);
-			}
-			throw new HostelException("NetWork Error Please try again");
-		}
-		throw new HostelException("OTP InValid Please type valid OTP");
+		LoginEntity loginEntity = SecurityRepositry.getByusername(dto.getUsername());
+		
+		if (loginEntity == null) {
+			if (verifyOTP(dto.getOtp())) {
+				String failurl = AwsServise.AwsS3fail_stor(prof);
+				if (failurl != null) {
 
+					LoginEntity LoginEntity = new LoginEntity();
+					LoginEntity.setFuallname(dto.getFuallname());
+					LoginEntity.setUsername(dto.getUsername());
+					LoginEntity.setPassword(dto.getPassword());
+					LoginEntity.setRole(dto.getRole());
+					LoginEntity.setPeofaile(failurl);
+					return SecurityRepositry.save(LoginEntity);
+
+				}
+				throw new HostelException("NetWork Error Please try again");
+			}
+			throw new HostelException("OTP InValid Please type valid OTP");
+
+		} else {
+//			System.out.print(loginEntity.getFuallname()+ " "+loginEntity.getUsername());
+			throw new HostelException("Please wait your data is being saved in the database");
+		}
+		
 	}
-	public List<LoginEntity> getAlluserdata(){
-		List<LoginEntity> logi=SecurityRepositry.findAll();
-		List<LoginEntity> loginlist=new ArrayList<>();
-		for(LoginEntity l:logi) {
+
+	public List<LoginEntity> getAlluserdata() {
+		List<LoginEntity> logi = SecurityRepositry.findAll();
+		List<LoginEntity> loginlist = new ArrayList<>();
+		for (LoginEntity l : logi) {
 			l.setPeofaile(AwsServise.oneUrlForImage(l.getPeofaile()));
 			loginlist.add(l);
 		}
@@ -112,28 +123,29 @@ public class SecurityService implements UserDetailsService {
 			throw new HostelException("You already Register Please go To Login");
 		}
 	}
-	public void Forgetpassword(DTOLogindata dto) throws HostelException{
+
+	public void Forgetpassword(DTOLogindata dto) throws HostelException {
 //		try {
-		String user=dto.getUsername();
-		String posswo=dto.getPassword();
-		
+		String user = dto.getUsername();
+		String posswo = dto.getPassword();
+
 		System.out.println(dto.getUsername());
 		System.out.println(dto.getPassword());
-		
+
 		LoginEntity se = SecurityRepositry.getByusername(user);
-		
-		
+
 		se.setPassword(posswo);
-		
-		System.out.println(se.getPassword()+" "+se.getUsername()+" "+se.getFuallname());
+
+		System.out.println(se.getPassword() + " " + se.getUsername() + " " + se.getFuallname());
 //		SecurityRepositry.save(se);
 //		}catch(Exception e) {
 //			throw new HostelException("Forgetpassword Failde please try again "+e.getMessage());
 //			
 //		}
 	}
+
 	public Optional<LoginEntity> Getuserdata(String Username) {
-		Optional<LoginEntity> ent=SecurityRepositry.findByUsername(Username);
+		Optional<LoginEntity> ent = SecurityRepositry.findByUsername(Username);
 		ent.get().setPeofaile(AwsServise.oneUrlForImage(ent.get().getPeofaile()));
 		return ent;
 	}
@@ -154,8 +166,6 @@ public class SecurityService implements UserDetailsService {
 			throw new HostelException(e.getMessage());
 		}
 	}
-
-	
 
 	public void sendEmail(String toEmail, String generatedOtp) {
 
@@ -185,6 +195,6 @@ public class SecurityService implements UserDetailsService {
 			throw new RuntimeException("Error sending email with HTML template: " + e.getMessage());
 		}
 
-    }
+	}
 
 }

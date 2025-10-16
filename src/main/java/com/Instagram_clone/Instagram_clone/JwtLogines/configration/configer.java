@@ -93,6 +93,7 @@ public class configer {
         
 //        configuration.setAllowedOrigins(Arrays.asList("http://localhost:5173/")); 
         configuration.setAllowedOrigins(Arrays.asList("https://ins-spring-boot-applicat-26fce.web.app/"));
+//        											   https://ins-spring-boot-applicat-26fce.web.app/
         configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type")); 
         
         configuration.setAllowCredentials(true); 
